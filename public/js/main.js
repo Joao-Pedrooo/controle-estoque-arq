@@ -1,12 +1,12 @@
 (function () {
   const firebaseConfig = {
-    apiKey: "AIzaSyCvbGBCHIZSNFTEfMUT4w3zQMWqv7VfArQ",
-    authDomain: "estoque-arq-6f373.firebaseapp.com",
-    projectId: "estoque-arq-6f373",
-    storageBucket: "estoque-arq-6f373.firebasestorage.app",
-    messagingSenderId: "730843595314",
-    appId: "1:730843595314:web:469758b1672844fc74f22b",
-    measurementId: "G-LR7XD9QJ4E",
+    apiKey: "AIzaSyCAmZ5ngKa4Pk76o-UE3jNeyN-ZoL5Nkeg",
+    authDomain: "controle-estoque-arq.firebaseapp.com",
+    projectId: "controle-estoque-arq",
+    storageBucket: "controle-estoque-arq.firebasestorage.app",
+    messagingSenderId: "986364694286",
+    appId: "1:986364694286:web:31c29ad76ebb7acb01515f",
+    measurementId: "G-GH989WBJ3Y",
   };
 
   if (!firebase.apps.length) {

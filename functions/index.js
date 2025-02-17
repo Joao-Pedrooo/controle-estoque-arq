@@ -1,12 +1,15 @@
-// functions/index.js
+const admin = require("firebase-admin");
 
-// Importa o Firebase Admin SDK (apenas uma vez)
-var admin = require("firebase-admin");
+if (process.env.FUNCTIONS_EMULATOR) {
+  // Se estiver no emulador, use o arquivo de credenciais
+  const serviceAccount = require("./serviceAccountKey.json");
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://<seu-projeto>.firebaseio.com",
+  });
+} else {
+  // Em produção, não use o arquivo de credenciais
+  admin.initializeApp();
+}
 
-// Carrega a chave de serviço (ajuste o caminho conforme necessário)
-var serviceAccount = require("./serviceAccountKey.json");
-
-// Inicializa o Firebase Admin apenas uma vez
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+const db = admin.firestore();
