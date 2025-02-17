@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Unidade</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      /* Espaço para a navbar fixa */
+      body {
+        padding-top: 70px;
+      }
+    </style>
+    <!-- Firebase compat scripts (versão 9.22.1) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <!-- Main.js que inicializa o Firebase (certifique-se que o caminho está correto) -->
+    <script src="js/main.js"></script>
+  </head>
+  <body class="bg-light">
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="central-admin-dashboard.html"
+            >Admin Central</a
+          >
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarContent"
+            aria-controls="navbarContent"
+            aria-expanded="false"
+            aria-label="Alternar navegação"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="central-admin-dashboard.html"
+                  >Dashboard</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="cadastro-unidade.html"
+                  >Cadastro de Unidade</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="unidades.html"
+                  >Listagem de Unidades</a
+                >
+              </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" id="logout-btn" href="#">Sair</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container mt-4">
+      <div class="d-flex justify-content-end mb-3">
+        <a href="central-admin-dashboard.html" class="btn btn-secondary">
+          &larr; Voltar para Dashboard
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Cadastro de Unidade</h2>
+          <form id="form-cadastro-unidade">
+            <!-- Dados da Unidade -->
+            <h4 class="mb-3">Dados da Unidade</h4>
+            <div class="mb-3">
+              <label for="nomeUnidade" class="form-label"
+                >Nome da Unidade</label
+              >
+              <input
+                type="text"
+                id="nomeUnidade"
+                class="form-control"
+                placeholder="Ex: Unidade A"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="localizacao" class="form-label">Localização</label>
+              <input
+                type="text"
+                id="localizacao"
+                class="form-control"
+                placeholder="Ex: Rua X, nº Y"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="contrato" class="form-label"
+                >Número do Contrato</label
+              >
+              <input
+                type="text"
+                id="contrato"
+                class="form-control"
+                placeholder="Digite o número do contrato"
+                required
+              />
+            </div>
+            <hr />
+            <!-- Dados do Administrador -->
+            <h4 class="mb-3">Dados do Administrador da Unidade</h4>
+            <div class="mb-3">
+              <label for="adminNome" class="form-label">Nome do Admin</label>
+              <input
+                type="text"
+                id="adminNome"
+                class="form-control"
+                placeholder="Digite o nome do admin"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="adminEmail" class="form-label">Email do Admin</label>
+              <input
+                type="email"
+                id="adminEmail"
+                class="form-control"
+                placeholder="Ex: admin@unidadea.com"
+                required
+                autocomplete="email"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="adminTelefone" class="form-label"
+                >Telefone do Admin</label
+              >
+              <input
+                type="text"
+                id="adminTelefone"
+                class="form-control"
+                placeholder="Digite o telefone do admin"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="adminSenha" class="form-label">Senha do Admin</label>
+              <input
+                type="password"
+                id="adminSenha"
+                class="form-control"
+                placeholder="Digite a senha do admin"
+                required
+                autocomplete="current-password"
+              />
+            </div>
+            <button type="submit" class="btn btn-success w-100">
+              Cadastrar Unidade
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Área para listar unidades (opcional) -->
+      <section id="units-list" class="mt-5"></section>
+    </main>
+
+    <!-- Código JavaScript para cadastro de unidade -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        console.log("DOM completamente carregado.");
+
+        // Verifica se o Firebase foi inicializado e as variáveis globais existem
+        if (!window.db || !window.firebase) {
+          console.error("Firebase não foi inicializado corretamente.");
+          return;
+        }
+
+        const db = window.db;
+
+        // Verifica se o formulário existe
+        const formCadastro = document.getElementById("form-cadastro-unidade");
+        if (!formCadastro) {
+          console.error("Formulário 'form-cadastro-unidade' não encontrado.");
+          return;
+        }
+
+        formCadastro.addEventListener("submit", (e) => {
+          e.preventDefault();
+          console.log("Evento de submit disparado.");
+
+          const nomeUnidade = document
+            .getElementById("nomeUnidade")
+            .value.trim();
+          const localizacao = document
+            .getElementById("localizacao")
+            .value.trim();
+          const contrato = document.getElementById("contrato").value.trim();
+          const adminNome = document.getElementById("adminNome").value.trim();
+          const adminEmail = document.getElementById("adminEmail").value.trim();
+          const adminTelefone = document
+            .getElementById("adminTelefone")
+            .value.trim();
+          const adminSenha = document.getElementById("adminSenha").value.trim();
+
+          if (
+            !nomeUnidade ||
+            !localizacao ||
+            !contrato ||
+            !adminNome ||
+            !adminEmail ||
+            !adminTelefone ||
+            !adminSenha
+          ) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+          }
+
+          const unitData = {
+            nomeUnidade,
+            localizacao,
+            contrato,
+            admin: {
+              nome: adminNome,
+              email: adminEmail,
+              telefone: adminTelefone,
+              senha: adminSenha, // Em produção, não armazene senhas em texto plano.
+            },
+            dataCadastro: firebase.firestore.FieldValue.serverTimestamp(),
+          };
+
+          console.log("Enviando dados da unidade:", unitData);
+          db.collection("units")
+            .add(unitData)
+            .then((docRef) => {
+              console.log("Unidade criada com ID:", docRef.id);
+              alert("Unidade cadastrada com sucesso!");
+              formCadastro.reset();
+            })
+            .catch((error) => {
+              console.error("Erro ao criar unidade:", error);
+              alert("Erro ao cadastrar a unidade: " + error.message);
+            });
+        });
+      });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

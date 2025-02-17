@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Setores - Unidade</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .container {
+        margin-top: 80px;
+      }
+    </style>
+    <!-- Firebase Compat Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <!-- Inicialização Global -->
+    <script src="js/main.js"></script>
+  </head>
+  <body>
+    <!-- Navbar simples com botão de logout e link para voltar ao painel da unidade -->
+    <nav class="navbar navbar-dark bg-dark fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" id="back-link" href="#">Painel da Unidade</a>
+        <button class="btn btn-outline-light" id="logout-btn">Sair</button>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h2 class="text-center mb-4">Setores da Unidade</h2>
+      <div class="mb-3">
+        <button id="add-setor-btn" class="btn btn-success">
+          + Adicionar Setor
+        </button>
+      </div>
+      <div id="setores-list">
+        <!-- Lista de setores será carregada aqui -->
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Lógica específica para Setores -->
+    <script src="js/setor.js"></script>
+
+    <!-- Configurações de Logout e HTTPS -->
+    <script>
+      // Botão de logout
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        firebase
+          .auth()
+          .signOut()
+          .then(() => (window.location.href = "admin-unit-login.html"))
+          .catch((error) => alert("Erro ao sair."));
+      });
+
+      // Validação de HTTPS (exceto em ambiente de desenvolvimento)
+      if (
+        location.protocol !== "https:" &&
+        location.hostname !== "localhost" &&
+        location.hostname !== "127.0.0.1"
+      ) {
+        window.location.href = "index.html";
+      }
+    </script>
+  </body>
+</html>

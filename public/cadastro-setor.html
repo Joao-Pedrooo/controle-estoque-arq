@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Setor</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .container {
+        margin-top: 80px;
+      }
+    </style>
+    <!-- Firebase Compat Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <!-- Inicialização Global -->
+    <script src="js/main.js"></script>
+  </head>
+  <body>
+    <!-- Navbar com botão de logout e link de retorno -->
+    <nav class="navbar navbar-dark bg-dark fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" id="back-link" href="#">Painel da Unidade</a>
+        <button class="btn btn-outline-light" id="logout-btn">Sair</button>
+      </div>
+    </nav>
+
+    <div class="container">
+      <h2 class="text-center my-4">Cadastro de Setor</h2>
+      <form id="setor-form">
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome do Setor</label>
+          <input
+            type="text"
+            class="form-control"
+            id="nome"
+            placeholder="Digite o nome do setor"
+            required
+          />
+        </div>
+        <div class="mb-3">
+          <label for="quantidade" class="form-label"
+            >Quantidade de Funcionários</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            id="quantidade"
+            placeholder="Digite a quantidade de funcionários"
+            required
+          />
+        </div>
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="ativo" />
+          <label class="form-check-label" for="ativo">Ativo</label>
+        </div>
+        <button type="submit" class="btn btn-success w-100">
+          Salvar Setor
+        </button>
+      </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Lógica de cadastro de setor -->
+    <script src="js/cadastro-setor.js"></script>
+
+    <!-- Scripts para Logout, link de retorno e HTTPS -->
+    <script>
+      // Função para obter parâmetros da URL
+      function getParameterByName(name) {
+        const params = new URLSearchParams(window.location.search);
+        return params.get(name);
+      }
+
+      const unitId = getParameterByName("unitId");
+      const setorId = getParameterByName("setorId");
+
+      if (!unitId) {
+        alert("Unidade não encontrada.");
+        window.location.href = "central-admin-dashboard.html";
+      }
+
+      // Atualiza o link "Painel da Unidade" na navbar com o unitId
+      document.getElementById(
+        "back-link"
+      ).href = `admin-unit.html?unitId=${unitId}`;
+
+      // Configura o botão de logout
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        firebase
+          .auth()
+          .signOut()
+          .then(() => (window.location.href = "admin-unit-login.html"))
+          .catch((error) => alert("Erro ao sair."));
+      });
+
+      // Validação de HTTPS (exceto para localhost)
+      if (
+        location.protocol !== "https:" &&
+        location.hostname !== "localhost" &&
+        location.hostname !== "127.0.0.1"
+      ) {
+        window.location.href = "index.html";
+      }
+    </script>
+  </body>
+</html>

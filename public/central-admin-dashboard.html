@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Central Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <style>
+      body {
+        padding-top: 70px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar Fixa -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Admin Central</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarContent"
+          aria-controls="navbarContent"
+          aria-expanded="false"
+          aria-label="Alternar navegação"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+              <a class="nav-link active" href="#" id="nav-dashboard"
+                >Dashboard</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="cadastro-unidade.html"
+                >Cadastro de Unidade</a
+              >
+            </li>
+
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="logout-btn">Sair</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <div class="container" id="content-area">
+      <h2>Dashboard Central</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Total de Unidades</h5>
+              <p class="card-text" id="total-unidades">Carregando...</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Total de Usuários</h5>
+              <p class="card-text" id="total-usuarios">Carregando...</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+              <h5 class="card-title">Eventos Analytics</h5>
+              <p class="card-text" id="eventos-analytics">Carregando...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Área para listar unidades -->
+      <div id="units-list" class="mt-4"></div>
+
+
+
+    <!-- Modal para Edição de Unidade -->
+    <div
+      class="modal fade"
+      id="editUnitModal"
+      tabindex="-1"
+      aria-labelledby="editUnitModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editUnitModalLabel">Editar Unidade</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Fechar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="edit-unit-form">
+              <!-- Campo oculto para o ID da unidade -->
+              <input type="hidden" id="edit-unit-id" />
+              <div class="mb-3">
+                <label for="edit-nomeUnidade" class="form-label"
+                  >Nome da Unidade</label
+                >
+                <input
+                  type="text"
+                  id="edit-nomeUnidade"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="edit-localizacao" class="form-label"
+                  >Localização</label
+                >
+                <input
+                  type="text"
+                  id="edit-localizacao"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="edit-contrato" class="form-label"
+                  >Número do Contrato</label
+                >
+                <input
+                  type="text"
+                  id="edit-contrato"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <hr />
+              <h5>Dados do Administrador</h5>
+              <div class="mb-3">
+                <label for="edit-adminNome" class="form-label"
+                  >Nome do Admin</label
+                >
+                <input
+                  type="text"
+                  id="edit-adminNome"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="edit-adminEmail" class="form-label"
+                  >Email do Admin</label
+                >
+                <input
+                  type="email"
+                  id="edit-adminEmail"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="edit-adminTelefone" class="form-label"
+                  >Telefone do Admin</label
+                >
+                <input
+                  type="text"
+                  id="edit-adminTelefone"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="edit-adminSenha" class="form-label"
+                  >Senha do Admin</label
+                >
+                <input
+                  type="password"
+                  id="edit-adminSenha"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-primary w-100">
+                Salvar Alterações
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts do Firebase compat (versão 9.22.1) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+    <!-- Carrega o script global do Firebase -->
+    <script src="js/main.js"></script>
+    <!-- Carrega o script do Dashboard -->
+    <script src="js/central-admin.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
